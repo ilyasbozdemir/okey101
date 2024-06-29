@@ -1,4 +1,4 @@
-// src/components/Tile.tsx
+// src/components/Main/(Game)/Tile.tsx
 import { Box } from '@chakra-ui/react';
 
 interface TileProps {

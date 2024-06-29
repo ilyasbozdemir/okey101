@@ -1,10 +1,12 @@
-// src/components/PlayerHand.tsx
+// src/components/Main/(Game)/PlayerHand.tsx
 import { Box, SimpleGrid } from '@chakra-ui/react';
 import Tile from './Tile';
 import { useGameState } from 'state/gameState';
 
 export default function PlayerHand() {
-  const { playerTiles, discardTile } = useGameState();
+  const { players, currentPlayer, discardTile } = useGameState();
+  const playerTiles = players[currentPlayer].tiles;
+
   return (
     <Box mt="4">
       <SimpleGrid columns={13} spacing={4}>

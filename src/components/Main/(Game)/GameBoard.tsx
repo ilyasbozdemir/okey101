@@ -1,25 +1,22 @@
-// src/components/GameBoard.tsx
-import { Box, SimpleGrid } from '@chakra-ui/react';
+// src/components/Main/(Game)/GameBoard.tsx
+import { Box, SimpleGrid, Text } from '@chakra-ui/react';
 import Tile from './Tile';
-
-// Okey taşları (numaralar ve renkler)
-const colors = ["red", "blue", "black", "yellow"];
-const tiles = [];
-for (let i = 1; i <= 13; i++) {
-  colors.forEach(color => {
-    tiles.push({ number: i, color });
-    tiles.push({ number: i, color });
-  });
-}
-// İki sahte okey taşı ekle
-tiles.push({ number: 0, color: "joker" });
-tiles.push({ number: 0, color: "joker" });
+import { useGameState } from 'state/gameState';
 
 export default function GameBoard() {
+  const { drawPile, discardPile } = useGameState();
+  
   return (
     <Box>
+      <Text fontWeight="bold">Çekme Yığını</Text>
       <SimpleGrid columns={13} spacing={4}>
-        {tiles.map((tile, index) => (
+        {drawPile.map((tile, index) => (
+          <Tile key={index} number={tile.number} color={tile.color} />
+        ))}
+      </SimpleGrid>
+      <Text fontWeight="bold" mt="4">Atma Yığını</Text>
+      <SimpleGrid columns={13} spacing={4}>
+        {discardPile.map((tile, index) => (
           <Tile key={index} number={tile.number} color={tile.color} />
         ))}
       </SimpleGrid>
