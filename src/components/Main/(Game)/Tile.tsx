@@ -1,50 +1,30 @@
-// src/components/Main/(Game)/Tile.tsx
-import { Box } from '@chakra-ui/react';
+// src/components/Main/Game/Tile.tsx
+import { Box, Text } from '@chakra-ui/react';
 
 interface TileProps {
-  number: number;
-  color: string;
+  tile: {
+    number: number;
+    color: string;
+  };
   onClick?: () => void;
 }
 
-export default function Tile({ number, color, onClick }: TileProps) {
-  const getColor = () => {
-    switch (color) {
-      case "red":
-        return "red.500";
-      case "blue":
-        return "blue.500";
-      case "black":
-        return "black";
-      case "yellow":
-        return "yellow.500";
-      case "joker":
-        return "gray.500";
-      default:
-        return "gray.200";
-    }
-  };
-
+export default function Tile({ tile, onClick }: TileProps) {
   return (
     <Box
-      width="50px"
-      height="70px"
-      bg="white"
-      border="1px solid"
-      borderColor="gray.300"
-      boxShadow="lg"
+      width="40px"
+      height="60px"
+      borderWidth="1px"
       borderRadius="md"
+      textAlign="center"
       display="flex"
       alignItems="center"
       justifyContent="center"
-      color={getColor()}
-      fontSize="lg"
-      fontWeight="bold"
+      cursor={onClick ? 'pointer' : 'default'}
+      bg={tile.color === 'joker' ? 'gray.300' : 'white'}
       onClick={onClick}
-      cursor={onClick ? "pointer" : "default"}
-      userSelect="none"
     >
-      {number !== 0 ? number : "J"}
+      <Text>{tile.number}</Text>
     </Box>
   );
 }

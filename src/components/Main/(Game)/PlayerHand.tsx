@@ -1,18 +1,25 @@
-// src/components/Main/(Game)/PlayerHand.tsx
+// src/components/Main/Game/PlayerHand.tsx
 import { Box, SimpleGrid } from '@chakra-ui/react';
 import Tile from './Tile';
-import { useGameState } from 'state/gameState';
 
-export default function PlayerHand() {
-  const { tables, currentTable, currentPlayer, discardTile } = useGameState();
-  const currentTableData = tables.find(table => table.id === currentTable);
-  const playerTiles = currentTableData?.players[currentPlayer].tiles || [];
+interface PlayerHandProps {
+  player: {
+    id: number;
+    name: string;
+    tiles: {
+      number: number;
+      color: string;
+    }[];
+  };
+  discardTile: (playerId: number, tile: { number: number; color: string }) => void;
+}
 
+export default function PlayerHand({ player, discardTile }: PlayerHandProps) {
   return (
-    <Box mt="4">
-      <SimpleGrid columns={[4, 8, 13]} spacing={2}>
-        {playerTiles.map((tile, index) => (
-          <Tile key={index} number={tile.number} color={tile.color} onClick={() => discardTile(tile)} />
+    <Box>
+      <SimpleGrid columns={14} spacing={2}>
+        {player.tiles.map((tile, index) => (
+          <Tile key={index} tile={tile} onClick={() => discardTile(player.id, tile)} />
         ))}
       </SimpleGrid>
     </Box>

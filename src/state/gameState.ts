@@ -8,26 +8,18 @@ interface Tile {
 
 interface Player {
   id: number;
-  name: string | null;
+  name: string;
   tiles: Tile[];
 }
 
-interface Table {
-  id: number;
-  players: Player[];
-}
-
 interface GameState {
-  tables: Table[];
-  currentTable: number | null;
-  currentPlayer: number;
+  players: Player[];
   drawPile: Tile[];
   discardPile: Tile[];
-  createTable: () => void;
-  joinTable: (tableId: number, playerName: string) => void;
-  setCurrentTable: (tableId: number) => void;
-  startGame: () => void;
-  discardTile: (tile: Tile) => void;
+  currentPlayer: number;
+  createPlayers: (playerNames: string[]) => void;
+  drawTile: (playerId: number) => void;
+  discardTile: (playerId: number, tile: Tile) => void;
   nextTurn: () => void;
 }
 
@@ -46,51 +38,36 @@ tiles.push({ number: 0, color: "joker" });
 const shuffledTiles = tiles.sort(() => Math.random() - 0.5);
 
 export const useGameState = create<GameState>((set) => ({
-  tables: [],
-  currentTable: null,
-  currentPlayer: 0,
-  drawPile: shuffledTiles.slice(0, 50),
+  players: [],
+  drawPile: shuffledTiles,
   discardPile: [],
-  createTable: () => set(state => ({
-    tables: [...state.tables, { id: Date.now(), players: [] }]
-  })),
-  joinTable: (tableId, playerName) => set(state => {
-    const tableIndex = state.tables.findIndex(table => table.id === tableId);
-    if (tableIndex !== -1) {
-      const players = state.tables[tableIndex].players;
-      if (players.length < 4) {
-        players.push({ id: players.length + 1, name: playerName, tiles: [] });
-      }
-      state.tables[tableIndex].players = players;
-    }
-    return { tables: state.tables };
+  currentPlayer: 0,
+  createPlayers: (playerNames) => set({
+    players: playerNames.map((name, id) => ({
+      id,
+      name,
+      tiles: shuffledTiles.slice(id * 14, (id + 1) * 14),
+    })),
   }),
-  setCurrentTable: (tableId) => set(() => ({
-    currentTable: tableId
-  })),
-  startGame: () => set(state => {
-    const tableIndex = state.tables.findIndex(table => table.id === state.currentTable);
-    if (tableIndex !== -1 && state.tables[tableIndex].players.length === 4) {
-      const newPlayers = state.tables[tableIndex].players.map(player => ({
-        ...player,
-        tiles: shuffledTiles.slice(0, 21),
-      }));
-      state.tables[tableIndex].players = newPlayers;
+  drawTile: (playerId) => set((state) => {
+    const newTile = state.drawPile.pop();
+    if (newTile) {
+      const players = state.players.map((player) =>
+        player.id === playerId ? { ...player, tiles: [...player.tiles, newTile] } : player
+      );
+      return { players, drawPile: state.drawPile };
     }
-    return { tables: state.tables };
+    return { ...state };
   }),
-  discardTile: (tile) => set((state) => {
-    const currentTableIndex = state.tables.findIndex(table => table.id === state.currentTable);
-    const currentPlayerIndex = state.currentPlayer;
-    if (currentTableIndex !== -1) {
-      const currentPlayer = state.tables[currentTableIndex].players[currentPlayerIndex];
-      const updatedTiles = currentPlayer.tiles.filter(t => t !== tile);
-      state.tables[currentTableIndex].players[currentPlayerIndex].tiles = updatedTiles;
-      state.discardPile = [...state.discardPile, tile];
-    }
-    return { tables: state.tables, discardPile: state.discardPile };
+  discardTile: (playerId, tile) => set((state) => {
+    const players = state.players.map((player) =>
+      player.id === playerId
+        ? { ...player, tiles: player.tiles.filter((t) => t !== tile) }
+        : player
+    );
+    return { players, discardPile: [...state.discardPile, tile] };
   }),
   nextTurn: () => set((state) => ({
-    currentPlayer: (state.currentPlayer + 1) % state.tables.find(table => table.id === state.currentTable)?.players.length!
-  }))
+    currentPlayer: (state.currentPlayer + 1) % state.players.length,
+  })),
 }));

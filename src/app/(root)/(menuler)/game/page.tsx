@@ -1,79 +1,48 @@
 // src/app/game/page.tsx
 "use client"
 
-import { Box, Button, Heading, VStack, Grid, GridItem, Input } from '@chakra-ui/react';
-import { useGameState } from 'state/gameState';
-import { useState } from 'react';
-import GameBoard from 'components/Main/(Game)/GameBoard';
-import PlayerHand from 'components/Main/(Game)/PlayerHand';
-import PlayerSeat from 'components/Main/(Game)/PlayerSeat';
+import { Box, Button, Heading, VStack, SimpleGrid, Grid, GridItem, HStack } from '@chakra-ui/react';
 import ControlButtons from 'components/Main/(Game)/ControlButtons';
+import PlayerSeat from 'components/Main/(Game)/PlayerSeat';
+import Tile from 'components/Main/(Game)/Tile';
+import { useState } from 'react';
+import { useGameState } from 'state/gameState';
 
 export default function GamePage() {
-  const { tables, createTable, joinTable, startGame, setCurrentTable, currentTable } = useGameState();
-  const [playerName, setPlayerName] = useState('');
+  const { players, drawPile, discardPile, createPlayers, drawTile, discardTile, currentPlayer } = useGameState();
+  const [playerNames, setPlayerNames] = useState(["Ahmet", "Yaşar", "Aslı", "Ali"]);
 
-  const currentTableData = tables.find(table => table.id === currentTable);
-  const allPlayersJoined = currentTableData && currentTableData.players.length === 4;
+  if (players.length === 0) {
+    createPlayers(playerNames);
+  }
 
   return (
     <Box textAlign="center" mt="50px">
       <Heading>Okey 101 Oyunu</Heading>
-      {currentTable === null ? (
-        <VStack spacing={4}>
-          <Button colorScheme="teal" onClick={createTable}>Masa Oluştur</Button>
-          <Heading size="md">Masalar</Heading>
-          <VStack spacing={2}>
-            {tables.map(table => (
-              <Box key={table.id} borderWidth="1px" borderRadius="md" p="4">
-                <Heading size="sm">Masa ID: {table.id}</Heading>
-                <VStack mt="2">
-                  {table.players.map(player => (
-                    <Box key={player.id}>{player.name}</Box>
-                  ))}
-                  {table.players.length < 4 && (
-                    <>
-                      <Input
-                        placeholder="Oyuncu Adı"
-                        value={playerName}
-                        onChange={(e) => setPlayerName(e.target.value)}
-                      />
-                      <Button colorScheme="teal" onClick={() => joinTable(table.id, playerName)}>
-                        Masaya Katıl
-                      </Button>
-                    </>
-                  )}
-                </VStack>
-                {table.players.length === 4 && (
-                  <Button colorScheme="teal" onClick={() => {
-                    setCurrentTable(table.id);
-                    startGame();
-                  }}>
-                    Oyunu Başlat
-                  </Button>
-                )}
-              </Box>
-            ))}
+      <Grid templateColumns="repeat(3, 1fr)" gap={4} mt="8">
+        {players.map((player, index) => (
+          <GridItem key={player.id} colSpan={index === 0 ? 3 : 1}>
+            <PlayerSeat player={player} isCurrent={index === currentPlayer} />
+          </GridItem>
+        ))}
+        <GridItem colSpan={3}>
+          <VStack spacing={4}>
+            <Heading size="md">Çekme Yığını</Heading>
+            <SimpleGrid columns={13} spacing={2}>
+              {drawPile.slice(0, 13).map((tile, index) => (
+                <Tile key={index} tile={tile} />
+              ))}
+            </SimpleGrid>
+            <Heading size="md">Atma Yığını</Heading>
+            <SimpleGrid columns={13} spacing={2}>
+              {discardPile.slice(0, 13).map((tile, index) => (
+                <Tile key={index} tile={tile} />
+              ))}
+            </SimpleGrid>
+            <ControlButtons drawTile={() => drawTile(currentPlayer)} />
           </VStack>
-        </VStack>
-      ) : (
-        <Grid templateColumns="repeat(3, 1fr)" templateRows="repeat(3, 1fr)" gap={6} mt="8" justifyItems="center" alignItems="center">
-          {currentTableData && currentTableData.players.map((player, index) => (
-            <GridItem key={index}>
-              <PlayerSeat playerIndex={index} isCurrent={false} playerName={player.name} />
-            </GridItem>
-          ))}
-          <GridItem rowSpan={2}>
-            <GameBoard />
-          </GridItem>
-          <GridItem colSpan={3}>
-            <PlayerHand />
-          </GridItem>
-          <GridItem colSpan={3}>
-            <ControlButtons />
-          </GridItem>
-        </Grid>
-      )}
+        </GridItem>
+      </Grid>
     </Box>
   );
 }

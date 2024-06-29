@@ -1,21 +1,17 @@
-// src/components/Main/(Game)/ControlButtons.tsx
-import { Button, HStack } from '@chakra-ui/react';
+// src/components/Main/Game/ControlButtons.tsx
+import { HStack, Button } from '@chakra-ui/react';
 
-export default function ControlButtons() {
+interface ControlButtonsProps {
+  drawTile: () => void;
+}
+
+export default function ControlButtons({ drawTile }: ControlButtonsProps) {
   return (
     <HStack mt="4" justifyContent="center">
-      <Button colorScheme="teal" variant={'outline'}>
-        Taş Çek
-      </Button>
-      <Button colorScheme="teal" variant={'outline'}>
-        Çift Aç
-      </Button>
-      <Button colorScheme="teal" variant={'outline'}>
-        Seri Diz
-      </Button>
-      <Button colorScheme="teal" variant={'outline'}>
-        Geri Al
-      </Button>
+      <Button colorScheme="teal" onClick={drawTile}>Taş Çek</Button>
+      <Button colorScheme="teal">Çift Aç</Button>
+      <Button colorScheme="teal">Seri Diz</Button>
+      <Button colorScheme="teal">Geri Al</Button>
     </HStack>
   );
 }
