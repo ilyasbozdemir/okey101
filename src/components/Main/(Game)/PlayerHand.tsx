@@ -1,4 +1,4 @@
-// src/components/Main/(Game)/PlayerHand.tsx
+// src/components/PlayerHand.tsx
 import { Box, SimpleGrid } from '@chakra-ui/react';
 import Tile from './Tile';
 import { useGameState } from 'state/gameState';

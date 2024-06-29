@@ -1,5 +1,5 @@
-// src/components/Main/(Game)/GameBoard.tsx
-import { Box, SimpleGrid, Text } from '@chakra-ui/react';
+// src/components/GameBoard.tsx
+import { Box, SimpleGrid, Text, VStack, HStack } from '@chakra-ui/react';
 import Tile from './Tile';
 import { useGameState } from 'state/gameState';
 
@@ -7,7 +7,7 @@ export default function GameBoard() {
   const { drawPile, discardPile } = useGameState();
 
   return (
-    <Box>
+    <VStack spacing={4}>
       <Box>
         <Text fontWeight="bold" mb="2">Çekme Yığını</Text>
         <SimpleGrid columns={[4, 8, 13]} spacing={2}>
@@ -16,7 +16,7 @@ export default function GameBoard() {
           ))}
         </SimpleGrid>
       </Box>
-      <Box mt="4">
+      <Box>
         <Text fontWeight="bold" mb="2">Atma Yığını</Text>
         <SimpleGrid columns={[4, 8, 13]} spacing={2}>
           {discardPile.slice(0, 13).map((tile, index) => (
@@ -24,6 +24,6 @@ export default function GameBoard() {
           ))}
         </SimpleGrid>
       </Box>
-    </Box>
+    </VStack>
   );
 }
