@@ -1,11 +1,12 @@
-// src/components/PlayerHand.tsx
+// src/components/Main/(Game)/PlayerHand.tsx
 import { Box, SimpleGrid } from '@chakra-ui/react';
 import Tile from './Tile';
 import { useGameState } from 'state/gameState';
 
 export default function PlayerHand() {
-  const { players, currentPlayer, discardTile } = useGameState();
-  const playerTiles = players[currentPlayer].tiles;
+  const { tables, currentTable, currentPlayer, discardTile } = useGameState();
+  const currentTableData = tables.find(table => table.id === currentTable);
+  const playerTiles = currentTableData?.players[currentPlayer].tiles || [];
 
   return (
     <Box mt="4">

@@ -1,4 +1,4 @@
-// src/components/Tile.tsx
+// src/components/Main/(Game)/Tile.tsx
 import { Box } from '@chakra-ui/react';
 
 interface TileProps {
@@ -32,6 +32,8 @@ export default function Tile({ number, color, onClick }: TileProps) {
       bg="white"
       border="1px solid"
       borderColor="gray.300"
+      boxShadow="lg"
+      borderRadius="md"
       display="flex"
       alignItems="center"
       justifyContent="center"
@@ -40,6 +42,7 @@ export default function Tile({ number, color, onClick }: TileProps) {
       fontWeight="bold"
       onClick={onClick}
       cursor={onClick ? "pointer" : "default"}
+      userSelect="none"
     >
       {number !== 0 ? number : "J"}
     </Box>

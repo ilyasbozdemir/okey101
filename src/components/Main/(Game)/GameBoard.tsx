@@ -1,5 +1,5 @@
-// src/components/GameBoard.tsx
-import { Box, SimpleGrid, Text, VStack, HStack } from '@chakra-ui/react';
+// src/components/Main/(Game)/GameBoard.tsx
+import { Box, SimpleGrid, Text, VStack } from '@chakra-ui/react';
 import Tile from './Tile';
 import { useGameState } from 'state/gameState';
 
