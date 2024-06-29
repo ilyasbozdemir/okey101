@@ -9,7 +9,7 @@ export default function PlayerHand() {
 
   return (
     <Box mt="4">
-      <SimpleGrid columns={13} spacing={4}>
+      <SimpleGrid columns={[4, 8, 13]} spacing={2}>
         {playerTiles.map((tile, index) => (
           <Tile key={index} number={tile.number} color={tile.color} onClick={() => discardTile(tile)} />
         ))}

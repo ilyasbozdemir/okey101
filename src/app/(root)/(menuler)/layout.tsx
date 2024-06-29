@@ -31,10 +31,14 @@ export default function RootLayout({
       <body>
         <Providers colorMode={colorMode?.value}>
           <>
-            <Flex direction={"column"} >
+            <Flex direction={"column"}>
+              {/*
               <Navbar />
+  */}
               {children}
-              <Footer />
+              {/*
+                  <Footer />
+  */}
             </Flex>
           </>
         </Providers>
