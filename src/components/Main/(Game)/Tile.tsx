@@ -4,9 +4,10 @@ import { Box } from '@chakra-ui/react';
 interface TileProps {
   number: number;
   color: string;
+  onClick?: () => void;
 }
 
-export default function Tile({ number, color }: TileProps) {
+export default function Tile({ number, color, onClick }: TileProps) {
   const getColor = () => {
     switch (color) {
       case "red":
@@ -37,6 +38,8 @@ export default function Tile({ number, color }: TileProps) {
       color={getColor()}
       fontSize="lg"
       fontWeight="bold"
+      onClick={onClick}
+      cursor={onClick ? "pointer" : "default"}
     >
       {number !== 0 ? number : "J"}
     </Box>

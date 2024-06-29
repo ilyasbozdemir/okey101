@@ -34,7 +34,8 @@
     "recharts": "^2.12.7",
     "server-only": "^0.0.1",
     "slick-carousel": "^1.8.1",
-    "yup": "^1.4.0"
+    "yup": "^1.4.0",
+    "zustand": "^4.5.4"
   },
   "devDependencies": {
     "@types/node": "^20",
